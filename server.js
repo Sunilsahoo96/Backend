@@ -10,7 +10,7 @@ const app = express();
 // Define allowed origins (local and production)
 const allowedOrigins = [
   "http://localhost:3000",  // For local development
-  "https://your-render-frontend-url.com", // Replace this with your actual Render frontend URL
+  "https://sunil-sahoo-wasserstoff.onrender.com", // Replace this with your actual Render frontend URL
 ];
 
 // CORS setup: Allow only specified origins
