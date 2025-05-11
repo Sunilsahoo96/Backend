@@ -6,12 +6,40 @@ const cors = require("cors");
 const fs = require("fs");
 
 const app = express();
-app.use(cors());
+
+// Define allowed origins (local and production)
+const allowedOrigins = [
+  "http://localhost:3000",  // For local development
+  "https://your-render-frontend-url.com", // Replace this with your actual Render frontend URL
+];
+
+// CORS setup: Allow only specified origins
+app.use(cors({
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      // Allow requests from localhost or the specified Render URL
+      callback(null, true);
+    } else {
+      // Reject requests from other origins
+      callback(new Error("CORS policy violation"), false);
+    }
+  },
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"]
+}));
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
-  },
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS policy violation"), false);
+      }
+    },
+    methods: ["GET", "POST"]
+  }
 });
 
 let users = new Map(); // socketId => username
